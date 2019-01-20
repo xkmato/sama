@@ -1,7 +1,7 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-from main.models import School
-from main.serializers import SchoolSerializer
+from main.models import School, CommunityUnit
+from main.serializers import SchoolSerializer, CommunityUnitSerializer
 
 
 class SchoolList(ListCreateAPIView):
@@ -12,3 +12,14 @@ class SchoolList(ListCreateAPIView):
 class SchoolDetail(RetrieveUpdateDestroyAPIView):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+
+
+class CommunityUnitList(ListCreateAPIView):
+    queryset = CommunityUnit.objects.all()
+    serializer_class = CommunityUnitSerializer
+
+
+class CommunityUnitDetail(RetrieveUpdateDestroyAPIView):
+    queryset = CommunityUnit.objects.all()
+    serializer_class = CommunityUnitSerializer
+

@@ -21,7 +21,11 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 
 class CommunityUnitSerializer(serializers.ModelSerializer):
+    number_of_schools = serializers.SerializerMethodField()
+
     class Meta:
         model = CommunityUnit
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'number_of_schools')
 
+    def get_number_of_schools(self, obj):
+        return obj.schools.count()
