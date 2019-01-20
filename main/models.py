@@ -1,3 +1,5 @@
+from curses.ascii import isdigit
+
 from django.db import models
 
 from main.utils import date_from_str
@@ -28,11 +30,28 @@ class School(models.Model):
     location = models.CharField(max_length=11, choices=LOCATION_CHOICES)
     date_enrolled = models.DateField(auto_now_add=True)
 
+    class Meta:
+        ordering = ('date_enrolled', )
+
     @classmethod
     def create_or_update_from_csv_row(cls, row):
-        community_unit, _id, name, num_olevel_students, num_alevel_students, num_boarding_students, num_day_students, \
-         num_female_students, num_male_students, boarding_fees_s3, day_fees_s3, boarding_fees_s5, day_fees_s5, \
-         num_students, num_teachers, location, date_enrolled = tuple(row)
+        community_unit = row[0]
+        _id = int(row[1])
+        name = row[2]
+        num_olevel_students = row[3] if row[3].isdigit() else 0
+        num_alevel_students = row[4] if row[4].isdigit() else 0
+        num_boarding_students = row[5] if row[5].isdigit() else 0
+        num_day_students = row[6] if row[6].isdigit() else 0
+        boarding_fees_s3 = row[7] if row[7].isdigit() else 0
+        day_fees_s3 = row[8] if row[8].isdigit() else 0
+        boarding_fees_s5 = row[9] if row[9].isdigit() else 0
+        day_fees_s5 = row[10] if row[10].isdigit() else 0
+        num_female_students = row[11] if row[11].isdigit() else 0
+        num_male_students = row[12] if row[12].isdigit() else 0
+        num_students = row[13] if row[13].isdigit() else 0
+        num_teachers = row[14] if row[14].isdigit() else 0
+        location = row[15]
+        date_enrolled = row[16]
 
         community_unit, _ = CommunityUnit.objects.get_or_create(name=community_unit)
         school_exists = cls.objects.filter(id=_id).exists()

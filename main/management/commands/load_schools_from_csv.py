@@ -6,7 +6,7 @@ from main.models import School
 
 
 class Command(BaseCommand):
-    help = "Create new shools from CSV file"
+    help = "Create new schools from CSV file `./manage.py load_schools_from_csv filename.csv`"
 
     def add_arguments(self, parser):
         parser.add_argument('file_name', type=str, help="Full path of csv file with schools")
