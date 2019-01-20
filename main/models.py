@@ -30,23 +30,23 @@ class School(models.Model):
 
     @classmethod
     def create_or_update_from_csv_row(cls, row):
-        _id, name, community_unit, num_olevel_students, num_alevel_students, num_boarding_students, num_day_students, \
+        community_unit, _id, name, num_olevel_students, num_alevel_students, num_boarding_students, num_day_students, \
          num_female_students, num_male_students, boarding_fees_s3, day_fees_s3, boarding_fees_s5, day_fees_s5, \
          num_students, num_teachers, location, date_enrolled = tuple(row)
 
-        community_unit = CommunityUnit.objects.get_or_create(name=community_unit)
-        school_exists = cls.objects.exists(id=_id)
+        community_unit, _ = CommunityUnit.objects.get_or_create(name=community_unit)
+        school_exists = cls.objects.filter(id=_id).exists()
         if school_exists:
-            schools = cls.objects.filter(id=_id).update(name=name, community_unit=community_unit,
-                                                        num_olevel_students=num_olevel_students,
-                                                        num_alevel_students=num_alevel_students,
-                                                        num_boarding_students=num_boarding_students,
-                                                        num_day_students=num_day_students,
-                                                        num_female_students=num_female_students,
-                                                        num_male_students=num_male_students,
-                                                        num_students=num_students, num_teachers=num_teachers,
-                                                        location=location, date_enrolled=date_from_str(date_enrolled))
-            school = schools[0]
+            cls.objects.filter(id=_id).update(name=name, community_unit=community_unit,
+                                              num_olevel_students=num_olevel_students,
+                                              num_alevel_students=num_alevel_students,
+                                              num_boarding_students=num_boarding_students,
+                                              num_day_students=num_day_students,
+                                              num_female_students=num_female_students,
+                                              num_male_students=num_male_students,
+                                              num_students=num_students, num_teachers=num_teachers,
+                                              location=location.upper(), date_enrolled=date_from_str(date_enrolled))
+            school = cls.objects.get(id=_id)
         else:
             school = cls.objects.create(id=_id, name=name, community_unit=community_unit,
                                         num_olevel_students=num_olevel_students,
@@ -54,9 +54,9 @@ class School(models.Model):
                                         num_boarding_students=num_boarding_students, num_day_students=num_day_students,
                                         num_female_students=num_female_students, num_male_students=num_male_students,
                                         num_students=num_students, num_teachers=num_teachers,
-                                        location=location,date_enrolled=date_from_str(date_enrolled))
+                                        location=location.upper(), date_enrolled=date_from_str(date_enrolled))
 
-        FeesStructure.objects.create(school=school, boarding_s3=int(boarding_fees_s3), day_s3=int(day_fees_s3),
+        FeesStructure.create_or_update(school=school, boarding_s3=int(boarding_fees_s3), day_s3=int(day_fees_s3),
                                      boarding_s5=int(boarding_fees_s5), day_s5=int(day_fees_s5))
         return school
 
@@ -68,3 +68,12 @@ class FeesStructure(models.Model):
     boarding_s5 = models.IntegerField()
     day_s5 = models.IntegerField()
 
+    @classmethod
+    def create_or_update(cls, **kwargs):
+        school = kwargs.get('school')
+        if cls.objects.filter(school=school).exists():
+            kwargs.pop('school')
+            cls.objects.filter(school=school).update(**kwargs)
+        else:
+            cls.objects.create(**kwargs)
+        return cls.objects.get(school=school)
