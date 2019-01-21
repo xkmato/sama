@@ -12,6 +12,9 @@ class CommunityUnit(models.Model):
     """
     name = models.CharField(max_length=60)
 
+    class Meta:
+        ordering = ('name',)
+
 
 class School(models.Model):
     """
@@ -134,7 +137,11 @@ class Summary(object):
         """
         o_level = School.objects.filter(has_alevel=False, has_olevel=True).count()
         a_level = School.objects.filter(has_alevel=True, has_olevel=False).count()
-        self.ratio_o_level_to_a_level = o_level or 1/a_level or 1 #set default to 1 if queryset returns 0
+        try:
+            self.ratio_o_level_to_a_level = o_level/a_level
+        except ZeroDivisionError:
+            self.ratio_o_level_to_a_level = 0
+
 
     def get_median_fees(self):
         """
@@ -168,6 +175,6 @@ class Summary(object):
                                                                                              Sum('num_students'))
 
         self.teacher_student_ratio_urban = teachers_urban.get('teachers', 1) /students_urban.get('students',1)
-        self.teacher_student_ratio_rural = teachers_rural.get('teachers',1) /students_rural.get('students',1)
+        self.teacher_student_ratio_rural = teachers_rural.get('teachers', 1) /students_rural.get('students',1)
         self.teacher_student_ratio_peri_urban = teachers_peri_urban.get('teachers', 1) \
                                                 / students_peri_urban.get('students',1)

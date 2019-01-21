@@ -1,4 +1,3 @@
-from django.forms import model_to_dict
 from django.test import TestCase
 
 from main.models import School
