@@ -27,23 +27,23 @@ class SchoolList(ListCreateAPIView):
 
 class SchoolDetail(RetrieveUpdateDestroyAPIView):
     """
-        This endpoint displays School Details
+    This endpoint displays School Details
 
-        By making a ``GET`` request you can view the school details. Each school has the following attributes
+    By making a ``GET`` request you can view the school details. Each school has the following attributes
 
-        * **id** - The ID of the School (int)
-        * **name** - The NAME of the school (str) (readonly)
-        * **community_name** - The Community Unit Name in which the school belongs (str)
-        * **num_students** - The Number of students in the school (int)
-        * **num_teachers** - The Number of teachers in the school (int)
-        * **location** - The location of the school (str: RURAL, URBAN, PERI-URBAN)
-        * **date_enrolled** - The date when the school was enrolled (date)
-        * **fees** - The Fees Structure for the school (dict)
+    * **id** - The ID of the School (int)
+    * **name** - The NAME of the school (str) (readonly)
+    * **community_name** - The Community Unit Name in which the school belongs (str)
+    * **num_students** - The Number of students in the school (int)
+    * **num_teachers** - The Number of teachers in the school (int)
+    * **location** - The location of the school (str: RURAL, URBAN, PERI-URBAN)
+    * **date_enrolled** - The date when the school was enrolled (date)
+    * **fees** - The Fees Structure for the school (dict)
 
-        By making a ``PUT`` request, you can edit the relevant School with the fields above
+    By making a ``PUT`` request, you can edit the relevant School with the fields above
 
-        By making a ``DELETE`` request, you delete the relevant school
-        """
+    By making a ``DELETE`` request, you delete the relevant school
+    """
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
 
