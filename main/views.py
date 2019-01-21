@@ -1,7 +1,9 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from main.models import School, CommunityUnit, FeesStructure
-from main.serializers import SchoolSerializer, CommunityUnitSerializer, FeesStructureSerializer
+from main.models import School, CommunityUnit, FeesStructure, Summary
+from main.serializers import SchoolSerializer, CommunityUnitSerializer, FeesStructureSerializer, SummarySerializer
 
 
 class SchoolList(ListCreateAPIView):
@@ -92,3 +94,12 @@ class FeesStructureList(ListAPIView):
     queryset = FeesStructure.objects.all()
     serializer_class = FeesStructureSerializer
 
+
+class SummaryDetail(APIView):
+    """
+    Relevant Summaries for the available data
+    """
+    def get(self, request, format=None):
+        summary = Summary()
+        serializer = SummarySerializer(summary, many=False)
+        return Response(serializer.data)

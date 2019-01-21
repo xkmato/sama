@@ -21,9 +21,9 @@ class SerializerTest(TestCase):
         community_data = self.community_serializer.data
         fees_data = self.fees_serializer.data
 
-        self.assertEqual(set(school_data.keys()), {'id', 'name', 'community_unit', 'num_olevel_students',
-                                                   'num_alevel_students', 'num_boarding_students','num_day_students',
-                                                   'num_female_students', 'num_male_students', 'num_students',
+        self.assertEqual(set(school_data.keys()), {'id', 'name', 'community_unit', 'has_olevel',
+                                                   'has_alevel', 'has_boarding','has_day',
+                                                   'has_female', 'has_male', 'num_students',
                                                    'num_teachers','location', 'date_enrolled', 'fees'})
         self.assertEqual(set(community_data.keys()), {'id', 'name', 'number_of_schools'})
         self.assertEqual(set(fees_data.keys()), {'boarding_s3', 'day_s3', 'boarding_s5', 'day_s5'})

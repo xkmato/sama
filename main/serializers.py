@@ -15,9 +15,8 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ('id', 'name', 'community_unit', 'num_olevel_students', 'num_alevel_students', 'num_boarding_students',
-                  'num_day_students', 'num_female_students', 'num_male_students', 'num_students', 'num_teachers',
-                  'location', 'date_enrolled', 'fees')
+        fields = ('id', 'name', 'community_unit', 'has_olevel', 'has_alevel', 'has_boarding', 'has_day', 'has_female',
+                  'has_male', 'num_students', 'num_teachers', 'location', 'date_enrolled', 'fees')
 
 
 class CommunityUnitSerializer(serializers.ModelSerializer):
@@ -29,3 +28,16 @@ class CommunityUnitSerializer(serializers.ModelSerializer):
 
     def get_number_of_schools(self, obj):
         return obj.schools.count()
+
+
+class SummarySerializer(serializers.Serializer):
+    ratio_o_level_to_a_level = serializers.FloatField()
+    median_fees_s3_day = serializers.FloatField()
+    median_fees_s3_boarding = serializers.FloatField()
+    median_fees_s5_day = serializers.FloatField()
+    median_fees_s5_boarding = serializers.FloatField()
+    average_school_size = serializers.FloatField()
+    teacher_student_ratio_urban = serializers.FloatField()
+    teacher_student_ratio_rural = serializers.FloatField()
+    teacher_student_ratio_peri_urban = serializers.FloatField()
+
