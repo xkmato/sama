@@ -32,9 +32,6 @@ before_script:
   - psql -U postgres -c "ALTER ROLE sama WITH SUPERUSER;"
   - psql -U sama postgres -c "CREATE DATABASE sama;"
 
-  # use dev settings file
-  - ln -s $TRAVIS_BUILD_DIR/sama/settings.py.dev $TRAVIS_BUILD_DIR/sama/settings.py
-
 
 script:
 
