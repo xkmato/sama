@@ -1,0 +1,55 @@
+# use Ubuntu Trusty
+dist:
+  - trusty
+sudo:
+  - false
+
+language: python
+python:
+  - "3.6.6"
+addons:
+  apt:
+    packages:
+      - postgresql-9.6-postgis-2.3
+  postgresql: "9.6"
+
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+
+install:
+
+  # install all Python dependencies
+  - travis_retry pip install --upgrade pip
+  - pip --version
+  - travis_retry pip install pipenv
+  - pipenv install
+
+before_script:
+
+  # setup test database
+  - psql -U postgres -c "CREATE USER sama WITH PASSWORD 'sama';"
+  - psql -U postgres -c "ALTER ROLE sama WITH SUPERUSER;"
+  - psql -U sama postgres -c "CREATE DATABASE sama;"
+
+  # use dev settings file
+  - ln -s $TRAVIS_BUILD_DIR/sama/settings.py.dev $TRAVIS_BUILD_DIR/sama/settings.py
+
+
+script:
+
+  # check for model changes not reflected in a migration
+  - python manage.py makemigrations --dry-run | grep 'No changes detected' || (echo 'There are changes which require migrations.' && exit 1)
+
+  # check we can collect and compress all static files
+  - python manage.py collectstatic --noinput --verbosity=0
+
+  # run our Python tests
+  - coverage run manage.py test --noinput --verbosity=2
+
+  - set +e
+
+after_success:
+  - coveralls --rcfile .coveragerc_failcheck
+  - coverage report -i --rcfile .coveragerc
+  - coverage report -i --rcfile .coveragerc_failcheck --fail-under=100
