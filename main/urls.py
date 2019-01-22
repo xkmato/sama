@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework_swagger.views import get_swagger_view
 
@@ -10,6 +11,8 @@ urlpatterns = [
     path('community_units/', CommunityUnitList.as_view(), name='communities'),
     path('community_units/<int:pk>', CommunityUnitDetail.as_view(), name='community'),
     path('summary/', SummaryDetail.as_view(), name='summary'),
+
+    path('api-token-auth/', obtain_auth_token),
 
     path('', get_swagger_view(title="Sama API"))
 ]

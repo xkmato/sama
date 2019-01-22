@@ -1,8 +1,10 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 from main.models import School, CommunityUnit, Summary
+from main.views import SchoolList, CommunityUnitList, CommunityUnitDetail, SummaryDetail, SchoolDetail
 
 factory = APIRequestFactory()
 
@@ -29,27 +31,42 @@ class ViewTests(TestCase):
         School.create_or_update_from_csv_row(row4)
         School.create_or_update_from_csv_row(row5)
 
+        self.user = User.objects.create(username='Test', email='test@test.test')
+        self.factory = APIRequestFactory()
+
     def test_schools_list(self):
-        response = self.client.get(reverse("schools"))
+        request = factory.get(reverse("schools"))
+        view = SchoolList.as_view()
+        force_authenticate(request, user=self.user, token=self.user.auth_token)
+        response = view(request)
         self.assertEqual(response.status_code, 200)
         results = response.data['results']
         self.assertEqual(len(results), School.objects.count())
 
     def test_communities_list(self):
-        response = self.client.get(reverse("communities"))
+        request = factory.get(reverse("communities"))
+        view = CommunityUnitList.as_view()
+        force_authenticate(request, user=self.user, token=self.user.auth_token)
+        response = view(request)
         self.assertEqual(response.status_code, 200)
         results = response.data['results']
         self.assertEqual(len(results), CommunityUnit.objects.count())
 
     def test_school_detail(self):
-        response = self.client.get(reverse("school", args=[2134]))
+        request = factory.get(reverse("school", args=[2134]))
+        view = SchoolDetail.as_view()
+        force_authenticate(request, user=self.user, token=self.user.auth_token)
+        response = view(request, pk=2134)
         self.assertEqual(response.status_code, 200)
         results = response.data
         self.assertEqual(results['id'], 2134)
 
     def test_community_detail(self):
         community = CommunityUnit.objects.first()
-        response = self.client.get(reverse("community", args=[community.pk]))
+        request = factory.get(reverse("community", args=[community.pk]))
+        view = CommunityUnitDetail.as_view()
+        force_authenticate(request, user=self.user, token=self.user.auth_token)
+        response = view(request, pk=community.pk)
         self.assertEqual(response.status_code, 200)
         results = response.data
         self.assertEqual(results['id'], community.pk)
@@ -57,7 +74,10 @@ class ViewTests(TestCase):
 
     def test_summary_detail(self):
         summary = Summary()
-        response = self.client.get(reverse("summary"))
+        request = factory.get(reverse("summary"))
+        view = SummaryDetail.as_view()
+        force_authenticate(request, user=self.user, token=self.user.auth_token)
+        response = view(request)
         self.assertEqual(response.status_code, 200)
         results = response.data
         self.assertEqual(results['teacher_student_ratio_urban'], summary.teacher_student_ratio_urban)

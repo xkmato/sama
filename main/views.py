@@ -1,4 +1,6 @@
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -23,6 +25,10 @@ class SchoolList(ListCreateAPIView):
 
         By making a ``POST`` request, you can create a new School with the fields above
     """
+
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
 
@@ -46,6 +52,10 @@ class SchoolDetail(RetrieveUpdateDestroyAPIView):
 
     By making a ``DELETE`` request, you delete the relevant school
     """
+
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
 
@@ -59,6 +69,10 @@ class CommunityUnitList(ListCreateAPIView):
         * **id** - The ID of the Community Unit (int) (readonly)
         * **name** - The NAME of the Community Unit (str)
     """
+
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     queryset = CommunityUnit.objects.all()
     serializer_class = CommunityUnitSerializer
 
@@ -76,6 +90,10 @@ class CommunityUnitDetail(RetrieveUpdateDestroyAPIView):
 
         By making a ``DELETE`` request you can delete the community unit
     """
+
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     queryset = CommunityUnit.objects.all()
     serializer_class = CommunityUnitSerializer
 
@@ -91,6 +109,9 @@ class FeesStructureList(ListAPIView):
         * **boarding_s5** - The amount paid by S5 BOARDING students (int)
         * **day_s5** - The amount paid by S5 DAY students (int)
     """
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     queryset = FeesStructure.objects.all()
     serializer_class = FeesStructureSerializer
 
@@ -99,6 +120,9 @@ class SummaryDetail(APIView):
     """
     Relevant Summaries for the available data
     """
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, format=None):
         summary = Summary()
         serializer = SummarySerializer(summary, many=False)

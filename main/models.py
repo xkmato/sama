@@ -1,7 +1,11 @@
 from statistics import median
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Avg, Sum
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 from main.utils import date_from_str
 
@@ -178,3 +182,9 @@ class Summary(object):
         self.teacher_student_ratio_rural = teachers_rural.get('teachers', 1) /students_rural.get('students',1)
         self.teacher_student_ratio_peri_urban = teachers_peri_urban.get('teachers', 1) \
                                                 / students_peri_urban.get('students',1)
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
