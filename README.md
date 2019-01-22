@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/xkmato/sama.svg?branch=master)](https://travis-ci.org/xkmato/sama)
+
 #Sama Schools API
 
 This application exposes the Sama schools API.
