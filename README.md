@@ -56,12 +56,12 @@ for Docker to run systemd in a container.)
 Wait a few minutes for the magic to happen. Access the app by going to this
 URL: [https://sama-school-app.local](https://sama-school-app.local)
 
-### Deploy to Staging server
+### Provision Staging server
 
 Type this command from the `ansible` directory:
 
 ```
-ansible-playbook -i stage webservers.yml --tags="deploy"
+ansible-playbook -i stage site.yml --tags="deploy"
 ```
 
 

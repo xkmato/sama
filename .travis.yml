@@ -44,8 +44,6 @@ script:
   # run our Python tests
   - coverage run manage.py test --noinput --verbosity=2
 
-  - set +e
-
 after_success:
   - coveralls --rcfile .coveragerc_failcheck
   - coverage report -i --rcfile .coveragerc

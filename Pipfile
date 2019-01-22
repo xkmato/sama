@@ -13,7 +13,6 @@ django-filter = "*"
 django-rest-swagger = "*"
 coverage = "*"
 psycopg2 = "*"
-pip = "*"
 
 [requires]
 python_version = "3.7"
