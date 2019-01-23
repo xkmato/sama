@@ -135,6 +135,11 @@ class SummaryDetail(APIView):
 
 
 class DataCSVViewSet(ModelViewSet):
+    """
+    View to handle CSV upload
+    """
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     queryset = DataCSV.objects.all()
     serializer_class = DataCSVSerializer
 
