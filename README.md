@@ -10,8 +10,9 @@ Please follow the instructions below
 
 ```
 git clone https://github.com/xkmato/sama
-
 cd sama
+pip install pipenv
+pipenv install
 ```
 
 **Create Database**
@@ -40,6 +41,14 @@ psql -U sama postgres -c "CREATE DATABASE sama;"
 *Setup Test data(optional)*
 
 `./manage.py load_schools_from_csv test_files/test_csv_data.csv`
+
+*Create superuser(optional)*
+
+```
+./manage.py createsuperuser
+#Signin user at /rest-auth/login
+#Access full API documentation at /
+```
 
 ### Creating the machine
 

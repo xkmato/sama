@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework_swagger.views import get_swagger_view
@@ -13,6 +13,8 @@ urlpatterns = [
     path('summary/', SummaryDetail.as_view(), name='summary'),
 
     path('api-token-auth/', obtain_auth_token),
+
+    path('rest-auth/', include('rest_auth.urls')),
 
     path('', get_swagger_view(title="Sama API"))
 ]
