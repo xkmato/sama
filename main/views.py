@@ -1,4 +1,4 @@
-from rest_framework.authentication import TokenAuthentication, BasicAuthentication
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -26,7 +26,7 @@ class SchoolList(ListCreateAPIView):
         By making a ``POST`` request, you can create a new School with the fields above
     """
 
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
     queryset = School.objects.all()
@@ -53,7 +53,7 @@ class SchoolDetail(RetrieveUpdateDestroyAPIView):
     By making a ``DELETE`` request, you delete the relevant school
     """
 
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
     queryset = School.objects.all()
@@ -70,7 +70,7 @@ class CommunityUnitList(ListCreateAPIView):
         * **name** - The NAME of the Community Unit (str)
     """
 
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
     queryset = CommunityUnit.objects.all()
@@ -91,7 +91,7 @@ class CommunityUnitDetail(RetrieveUpdateDestroyAPIView):
         By making a ``DELETE`` request you can delete the community unit
     """
 
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
     queryset = CommunityUnit.objects.all()
@@ -109,7 +109,7 @@ class FeesStructureList(ListAPIView):
         * **boarding_s5** - The amount paid by S5 BOARDING students (int)
         * **day_s5** - The amount paid by S5 DAY students (int)
     """
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
     queryset = FeesStructure.objects.all()
@@ -120,7 +120,7 @@ class SummaryDetail(APIView):
     """
     Relevant Summaries for the available data
     """
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
