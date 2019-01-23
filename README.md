@@ -11,6 +11,7 @@ Please follow the instructions below
 ```
 git clone https://github.com/xkmato/sama
 cd sama
+mv sama/settings.py.dev sama/settings.py #replace heroku settings
 pip install pipenv
 pipenv install
 ```
