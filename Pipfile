@@ -14,6 +14,10 @@ django-rest-swagger = "*"
 coverage = "*"
 psycopg2 = "*"
 django-rest-auth = "*"
+gunicorn = "*"
+whitenoise = "*"
+dj-database-url = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.7"
