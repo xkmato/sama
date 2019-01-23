@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from main.models import School, CommunityUnit, FeesStructure
+from main.models import School, CommunityUnit, FeesStructure, DataCSV
 
 
 class FeesStructureSerializer(serializers.ModelSerializer):
@@ -28,6 +28,13 @@ class CommunityUnitSerializer(serializers.ModelSerializer):
 
     def get_number_of_schools(self, obj):
         return obj.schools.count()
+
+
+class DataCSVSerializer(serializers.ModelSerializer):
+    uploaded_by = serializers.ReadOnlyField(source='uploaded_by.name')
+    class Meta:
+        model = DataCSV
+        fields = ('uploaded_by', 'csv',)
 
 
 class SummarySerializer(serializers.Serializer):

@@ -1,11 +1,16 @@
+import codecs
+import csv
+
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from main.models import School, CommunityUnit, FeesStructure, Summary
-from main.serializers import SchoolSerializer, CommunityUnitSerializer, FeesStructureSerializer, SummarySerializer
+from main.models import School, CommunityUnit, FeesStructure, Summary, DataCSV
+from main.serializers import SchoolSerializer, CommunityUnitSerializer, FeesStructureSerializer, SummarySerializer, \
+    DataCSVSerializer
 
 
 class SchoolList(ListCreateAPIView):
@@ -127,3 +132,15 @@ class SummaryDetail(APIView):
         summary = Summary()
         serializer = SummarySerializer(summary, many=False)
         return Response(serializer.data)
+
+
+class DataCSVViewSet(ModelViewSet):
+    queryset = DataCSV.objects.all()
+    serializer_class = DataCSVSerializer
+
+    def perform_create(self, serializer):
+        file = self.request.FILES.get('csv')
+        reader = csv.reader(codecs.iterdecode(file, 'utf-8'))
+        for row in reader:
+            School.create_or_update_from_csv_row(row)
+        serializer.save(uploaded_by=self.request.user)

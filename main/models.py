@@ -1,6 +1,7 @@
 from statistics import median
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Avg, Sum
 from django.db.models.signals import post_save
@@ -182,6 +183,11 @@ class Summary(object):
         self.teacher_student_ratio_rural = teachers_rural.get('teachers', 1) /students_rural.get('students',1)
         self.teacher_student_ratio_peri_urban = teachers_peri_urban.get('teachers', 1) \
                                                 / students_peri_urban.get('students',1)
+
+
+class DataCSV(models.Model):
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    csv = models.FileField()
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
